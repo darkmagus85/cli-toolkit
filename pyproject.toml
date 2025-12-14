@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cli-toolkit"
+version = "0.1.0"
+description = "Personal CLI toolkit"
+authors = [
+    { name = "Dean Morrison", email = "your-email@example.com" }
+]
+dependencies = []
+
