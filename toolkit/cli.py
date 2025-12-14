@@ -1,12 +1,16 @@
 import argparse
 
-
 def main():
-    parser = argparse.ArgumentParser(prog="toolkit", description="Personal CLI toolkit")
+    parser = argparse.ArgumentParser(
+        prog="toolkit",
+        description="Personal CLI toolkit"
+    )
 
     subparsers = parser.add_subparsers(dest="command")
 
-    subparsers.add_parser("rename", help="Bulk rename files")
+    rename_parser = subparsers.add_parser("rename", help="Bulk rename files")
+    rename_parser.add_argument("prefix", help="Prefix for renamed files")
+
     subparsers.add_parser("backup", help="Create backups")
     subparsers.add_parser("info", help="Show system info")
 
@@ -16,8 +20,12 @@ def main():
         parser.print_help()
         return
 
-    print(f"{args.command} command not implemented yet")
+    if args.command == "rename":
+        from toolkit.rename import run
+        run(args.prefix)
+        return
 
+    print(f"{args.command} command not implemented yet")
 
 if __name__ == "__main__":
     main()
