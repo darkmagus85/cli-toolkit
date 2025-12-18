@@ -1,31 +1,61 @@
 import argparse
+from toolkit.rename import run as rename_run
+from toolkit.backup import run as backup_run
+from toolkit.info import run as info_run
+
 
 def main():
-    parser = argparse.ArgumentParser(
-        prog="toolkit",
-        description="Personal CLI toolkit"
+    parser = argparse.ArgumentParser(prog="toolkit")
+    subparsers = parser.add_subparsers(dest="command", required=True)
+
+    # -------------------
+    # Rename subcommand
+    # -------------------
+    rename_parser = subparsers.add_parser("rename", help="Rename files")
+    rename_parser.add_argument("prefix", help="Prefix to use for renamed files")
+    rename_parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without making changes",
     )
 
-    subparsers = parser.add_subparsers(dest="command")
+    # -------------------
+    # Backup subcommand (placeholder)
+    # -------------------
+    backup_parser = subparsers.add_parser("backup", help="Backup files")
+    backup_parser.add_argument("target", help="Target path to backup")
+    backup_parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without making changes",
+    )
 
-    rename_parser = subparsers.add_parser("rename", help="Bulk rename files")
-    rename_parser.add_argument("prefix", help="Prefix for renamed files")
+    # -------------------
+    # Info subcommand (placeholder)
+    # -------------------
+    info_parser = subparsers.add_parser("info", help="Show file info")
+    info_parser.add_argument("files", nargs="*", help="Files to inspect")
+    info_parser.add_argument(
+        "-d",
+        "--dry-run",
+        action="store_true",
+        help="Show what would be done without making changes",
+    )
 
-    subparsers.add_parser("backup", help="Create backups")
-    subparsers.add_parser("info", help="Show system info")
-
+    # -------------------
+    # Parse and dispatch
+    # -------------------
     args = parser.parse_args()
 
-    if not args.command:
-        parser.print_help()
-        return
-
     if args.command == "rename":
-        from toolkit.rename import run
-        run(args.prefix)
-        return
+        rename_run(prefix=args.prefix, dry_run=args.dry_run)
+    elif args.command == "backup":
+        backup_run(target=args.target, dry_run=args.dry_run)
+    elif args.command == "info":
+        info_run(files=args.files, dry_run=args.dry_run)
 
-    print(f"{args.command} command not implemented yet")
 
 if __name__ == "__main__":
     main()
